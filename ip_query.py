@@ -1,12 +1,18 @@
 
+import time
 from requests import get
+
 
 class ExternalIpQuery():
     def __init__(self, api):
         self.api = api
 
     def request_ip(self):
-        ip = get(api).text
+        try:
+            ip = get(self.api).text
+        except ConnectionError:
+            print("error")
+            time.sleep(30)
         return ip
 
 
