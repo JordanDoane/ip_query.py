@@ -7,12 +7,14 @@ import socket
 
 
 class ExternalIpQuery():
-    def __init__(self, api, url):
+    def __init__(self, api):
         self.api = api
-        self.url = url
+        self.url = api
+        
 
     def request_ip(self):
         ip = None
+    
         try:
             ip = requests.get(self.api).text
         except socket.gaierror as socket_error:

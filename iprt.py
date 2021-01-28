@@ -1,34 +1,48 @@
 
-from file_tool import FileTools
+
 from ip_query import ExternalIpQuery
-import time
-
-config_file = "ipqt.conf"
-config = {}
-
-read_config = FileTools(config_file)
-config = read_config.Read_file()
-
-log_file = "ipqt.log"
-log_write = FileTools(log_file)
+from os import EX_CONFIG
 
 
+class Iprt:
+    from file_tool import FileTools
+    import time
+    from ip_query import ExternalIpQuery
+    
+    config_file = "/home/drako/Projects/ip_query_tool/iprt.conf"
+    config = {}
+    
+    #Retriving values from config file
+    read_config = FileTools(config_file)
+    config = read_config.read_config_file()
 
-ip = ExternalIpQuery(config.get("api"))
-current_ip = ip.request_ip()
-log_write.WriteNewLine(current_ip, True)
+    print(config.get("api"))
 
-while True:
+    ip_tool = ExternalIpQuery(config.get("api"))
+    ip = ip_tool.request_ip()
 
-    if ip.request_ip() != current_ip:
-        new_ip = ip.request_ip()
-        log_write.WriteNewLine(new_ip)
+    def __init__(self):
+        self.api = self.config.get("api")
+        self.mqtt_broker = self.config.get("mqtt_broker")
+        self.ip = self.ip_tool.request_ip()
 
-    else:
-        time.sleep(60)
+      
+    def run(self):
+        print("running!")
+        while True:
+            if self.ip_tool.request_ip() != self.ip:
+                self.ip = self.ip_tool.request_ip()
+            else:
+                print(self.ip)
+                self.time.sleep(10)
+            
+               
+          
+                
+
+def main():
+    app = Iprt()
+    app.run()
 
 
-
-
-
-
+if __name__ == "__main__": main()
