@@ -11,10 +11,16 @@ class ExternalIpQuery():
         self.api = api
         self.url = api
         
-
-    def request_ip(self):
-        ip = None
+    def is_connected(self, timeout = 3):
+        try:
+            request = requests.head(self.url, timeout=timeout)
+            return True
+        except requests.ConnectionError as ex:
+            print(ex)
+            return False
     
+    def request_ip(self, timeout = 3):
+        ip = None
         try:
             ip = requests.get(self.api).text
         except socket.gaierror as socket_error:
@@ -30,25 +36,16 @@ class ExternalIpQuery():
             print(req_ex_conn_error)
             print("connection error!")
         return ip
-
-    def is_connected(self, timeout = 3):
-        try:
-            request = requests.head(self.url, timeout=timeout)
-            return request
-        except requests.ConnectionError as ex:
-            print(ex)
-            return False
-
-
+               
+            
 def main():
     api = "https://api.ipify.org"
 
 
-    p1 = ExternalIpQuery(api, api)
-
-    is_connected = (p1.request_ip())
-
-    print(is_connected)
+    p1 = ExternalIpQuery(api)
+    ip = p1.request_ip()
+    print(ip)
+    
 
    
 
